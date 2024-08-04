@@ -77,14 +77,14 @@ p {
     margin: 5px 0;
 }
 
-/* Index page specific background */
+
 #index-home {
-    background-image: url('../static/images/background.jpg'); /* Path to your background image */
-    background-size: cover; /* Cover the entire section */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Prevent the background image from repeating */
-    filter: saturate(25%); /* Reduce the saturation to 50% */
-    height: 100vh; /* Full viewport height */
+    background-image: url('../static/images/background.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    filter: saturate(25%); 
+    height: 100vh; 
     display: flex;
     flex-direction: column;
     justify-content: center;
