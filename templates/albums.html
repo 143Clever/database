@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Music Database - Albums</title>
+    <title>Rock Hometown - Albums</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles.css">
 </head>
@@ -15,13 +15,17 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="bands.html">Bands</a></li>
                 <li><a href="albums.html">Albums</a></li>
-                <li><a href="timeline.html">Time Line</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <section id="albums">
             <h2>Albums</h2>
+            <form method="GET" action="/albums">
+                <input type="text" name="search" placeholder="Search for albums...">
+                <button type="submit">Search</button>
+            </form>
             <div class="album-list">
                 <div class="album-item">
                     <img src="../static/images/abbey.jpg" alt="Album 1">
@@ -35,10 +39,10 @@
                     <p>Artist: King Crimson</p>
                     <p>Release Year: 1969</p>
                 </div>
-              
+                <!-- Add more album items as needed -->
             </div>
+            
         </section>
     </main>
-    
 </body>
 </html>
