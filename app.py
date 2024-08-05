@@ -5,9 +5,9 @@ app = Flask(__name__)
 
 # Function to query the database
 def get_album_details(album_name):
-    conn = sqlite3.connect('music.db')  # Update to the correct database file name
+    conn = sqlite3.connect('music.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM album WHERE album_name=?", (album_name,))
+    cursor.execute("SELECT * FROM album WHERE LOWER(album_name)=LOWER(?)", (album_name,))
     album = cursor.fetchone()
     conn.close()
     return album
@@ -26,6 +26,10 @@ def albums():
         else:
             return render_template('albums.html', error="No album found with that name")
     return render_template('albums.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
