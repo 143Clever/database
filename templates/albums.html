@@ -25,10 +25,7 @@
             <form method="GET" action="/albums">
                 <input type="text" name="search" placeholder="Search for albums...">
                 <button type="submit">Search</button>
-            </form>
-            {% if error %}
-            <p class="error">{{ error }}</p>
-            {% endif %}
+          
             <div class="album-list">
                 <div class="album-item">
                     <img src="../static/images/abbey.jpg" alt="Album 1">
