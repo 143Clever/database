@@ -3,46 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Music Database - Bands</title>
-    <!-- 引用 Google Fonts -->
+    <title>Rock Hometown - Bands</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
-        <h1>Rock Music Database</h1>
+        <h1>Rock Hometown</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="bands.html">Bands</a></li>
-                <li><a href="albums.html">Albums</a></li>
-                <li><a href="timeline.html">Time Line</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('bands') }}">Bands</a></li>
+                <li><a href="{{ url_for('albums') }}">Albums</a></li>
+                <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <section id="bands">
             <h2>Bands</h2>
-            <form method="GET" action="/bands">
-                <input type="text" name="search" placeholder="Search for bands...">
-                <button type="submit">Search</button>
-            </form>
             <div class="band-list">
                 <div class="band-item">
-                    <img src="../static/images/Pink-Floyd.webp" alt="Band 1">
-                    <div class="details">
-                        <h3>Pink Floyd</h3>
-                        <p>Genre: Progressive Rock</p>
-                        <p>Years Active: 1970 - 1990</p>
-                    </div>
+                    <img src="{{ url_for('static', filename='images/Pink-Floyd.webp') }}" alt="Pink Floyd">
+                    <h3>Pink Floyd</h3>
+                    <p>Genre: Progressive Rock</p>
+                    <p>Years Active: 1970 - 1990</p>
                 </div>
                 <div class="band-item">
-                    <img src="../static/images/nirvana.jpg" alt="Band 2">
-                    <div class="details">
-                        <h3>Nirvana</h3>
-                        <p>Genre: Grunge</p>
-                        <p>Years Active: 1987 - 1994</p>
-                    </div>
+                    <img src="{{ url_for('static', filename='images/nirvana.jpg') }}" alt="Nirvana">
+                    <h3>Nirvana</h3>
+                    <p>Genre: Grunge</p>
+                    <p>Years Active: 1987 - 1994</p>
                 </div>
                 <!-- Add more band items as needed -->
             </div>

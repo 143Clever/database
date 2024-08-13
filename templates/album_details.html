@@ -12,20 +12,27 @@
         <h1>Rock Hometown</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="bands.html">Bands</a></li>
-                <li><a href="albums.html">Albums</a></li>
-                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('bands') }}">Bands</a></li>
+                <li><a href="{{ url_for('albums') }}">Albums</a></li>
+                <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <section id="album-details">
-            <h2>{{ album[2] }}</h2>
-            <img src="../static/images/{{ album[6] }}" alt="{{ album[2] }}">
-            <p>Artist: {{ album[1] }}</p>
-            <p>Release Year: {{ album[3] }}</p>
-            <p>Genre: {{ album[5] }}</p>
+            <h2>Search Results</h2>
+            <div class="album-list">
+                {% for album in albums %}
+                <div class="album-item">
+                    <img src="../static/images/{{ album[5] }}" alt="{{ album[1] }}">
+                    <h3>{{ album[2] }}</h3>
+                    <p>Artist: {{ album[1] }}</p>
+                    <p>Release Year: {{ album[3] }}</p>
+                    <p>Genre: {{ album[4] }}</p>
+                </div>
+                {% endfor %}
+            </div>
         </section>
     </main>
 </body>

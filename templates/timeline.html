@@ -104,10 +104,10 @@
         <h1>Rock Hometown</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="bands.html">Bands</a></li>
-                <li><a href="albums.html">Albums</a></li>
-                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('bands') }}">Bands</a></li>
+                <li><a href="{{ url_for('albums') }}">Albums</a></li>
+                <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
             </ul>
         </nav>
     </header>

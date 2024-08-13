@@ -12,10 +12,10 @@
         <h1>Rock Hometown</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="bands.html">Bands</a></li>
-                <li><a href="albums.html">Albums</a></li>
-                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('bands') }}">Bands</a></li>
+                <li><a href="{{ url_for('albums') }}">Albums</a></li>
+                <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
             </ul>
         </nav>
     </header>
@@ -25,7 +25,21 @@
             <form method="GET" action="/albums">
                 <input type="text" name="search" placeholder="Search for albums...">
                 <button type="submit">Search</button>
-          
+            </form>
+            <div class="album-list">
+                {% if albums %}
+                    {% for album in albums %}
+                        <div class="album-item">
+                            <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}">
+                            <h3>{{ album['album_name'] }}</h3>
+                            <p>Artist: {{ album['band_name'] }}</p>
+                            <p>Release Year: {{ album['release_year'] }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No albums found.</p>
+                {% endif %}
+            </div>
             <div class="album-list">
                 <div class="album-item">
                     <img src="../static/images/abbey.jpg" alt="Album 1">

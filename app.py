@@ -3,33 +3,33 @@ import sqlite3
 
 app = Flask(__name__)
 
-# Function to query the database
-def get_album_details(album_name):
+def get_db_connection():
     conn = sqlite3.connect('music.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM album WHERE LOWER(album_name)=LOWER(?)", (album_name,))
-    album = cursor.fetchone()
-    conn.close()
-    return album
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/albums', methods=['GET', 'POST'])
+@app.route('/bands')
+def bands():
+    return render_template('bands.html')
+
+@app.route('/albums', methods=['GET'])
 def albums():
     search_query = request.args.get('search')
+    conn = get_db_connection()
     if search_query:
-        album = get_album_details(search_query)
-        if album:
-            return render_template('album_details.html', album=album)
-        else:
-            return render_template('albums.html', error="No album found with that name")
-    return render_template('albums.html')
+        albums = conn.execute("SELECT * FROM album WHERE album_name LIKE ?", ('%' + search_query + '%',)).fetchall()
+    else:
+        albums = conn.execute("SELECT * FROM album").fetchall()
+    conn.close()
+    return render_template('albums.html', albums=albums)
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+@app.route('/timeline')
+def timeline():
+    return render_template('timeline.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,22 +1,15 @@
-/* General styles */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
-    padding: 0;
     background-color: #FBFBFD;
     color: #1D1D1F;
 }
 
 header {
+    text-align: center;
+    padding: 20px 0;
     background-color: #1D1D1F;
     color: #FBFBFD;
-    padding: 20px 0;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2.5em;
 }
 
 nav ul {
@@ -26,68 +19,65 @@ nav ul {
 
 nav ul li {
     display: inline;
-    margin: 0 15px;
+    margin: 0 10px;
 }
 
 nav ul li a {
     color: #FBFBFD;
     text-decoration: none;
-    font-weight: bold;
 }
 
 main {
     padding: 20px;
 }
 
-.band-list, .album-list {
+#albums, #album-details {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.album-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    gap: 20px;
 }
 
-.band-item, .album-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #FFFFFF;
+.album-item {
+    flex: 1 1 200px;
     border: 1px solid #1D1D1F;
-    border-radius: 5px;
-    margin: 20px;
     padding: 10px;
-    width: calc(33% - 60px);
-    box-sizing: border-box;
     text-align: center;
 }
 
-.band-item img, .album-item img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 1px solid #1D1D1F;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+.album-item img {
+    max-width: 100%;
+    height: auto;
 }
 
-h3 {
-    margin: 10px 0;
-    font-size: 1.5em;
+.error {
+    color: red;
+    font-weight: bold;
 }
-
-p {
-    margin: 5px 0;
-}
-
-
-#index-home {
-    background-image: url('../static/images/background.jpg'); 
-    background-size: cover; 
-    background-position: center; 
-    background-repeat: no-repeat; 
-    filter: saturate(25%); 
-    height: 100vh; 
+.band-list {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Centers items horizontally */
+    flex-wrap: wrap; /* Allows items to wrap to the next line */
+    gap: 20px; /* Adds space between items */
+}
+
+.band-item {
+    width: 200px; /* Fixed width for consistency */
     text-align: center;
+}
+
+.band-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Ensures the image covers the specified height and width */
+    border-radius: 8px; /* Optional: Adds rounded corners */
+}
+
+/* Ensures text is horizontally aligned */
+.band-item h3, .band-item p {
+    margin: 5px 0;
 }
