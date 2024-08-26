@@ -12,24 +12,24 @@ def get_db_connection():
 def index():
     return render_template('index.html')
 
-@app.route('/bands')
-def bands():
-    return render_template('bands.html')
-
 @app.route('/albums', methods=['GET'])
 def albums():
-    search_query = request.args.get('search')
+    search = request.args.get('search')
     conn = get_db_connection()
-    if search_query:
-        albums = conn.execute("SELECT * FROM album WHERE album_name LIKE ?", ('%' + search_query + '%',)).fetchall()
+    
+    if search:
+        search = search.lower()
+        albums = conn.execute("SELECT * FROM album WHERE lower(album_name) LIKE ?", ('%' + search + '%',)).fetchall()
     else:
-        albums = conn.execute("SELECT * FROM album").fetchall()
+        albums = conn.execute('SELECT * FROM album').fetchall()
+    
     conn.close()
     return render_template('albums.html', albums=albums)
 
-@app.route('/timeline')
-def timeline():
-    return render_template('timeline.html')
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
+
+
+@app.route('/bands')
+def bands():
+    return render_template('bands.html')

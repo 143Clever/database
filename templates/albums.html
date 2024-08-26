@@ -30,30 +30,15 @@
                 {% if albums %}
                     {% for album in albums %}
                         <div class="album-item">
-                            <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}">
+                            <img src="{{ album['image'] }}" alt="{{ album['album_name'] }}">
                             <h3>{{ album['album_name'] }}</h3>
                             <p>Artist: {{ album['band_name'] }}</p>
-                            <p>Release Year: {{ album['release_year'] }}</p>
+                            <p>Release Year: {{ album['released_year'] }}</p>
                         </div>
                     {% endfor %}
                 {% else %}
                     <p>No albums found.</p>
                 {% endif %}
-            </div>
-            <div class="album-list">
-                <div class="album-item">
-                    <img src="../static/images/abbey.jpg" alt="Album 1">
-                    <h3>Abbey Road</h3>
-                    <p>Artist: The Beatles</p>
-                    <p>Release Year: 1969</p>
-                </div>
-                <div class="album-item">
-                    <img src="../static/images/king.jpg" alt="Album 2">
-                    <h3>In the Court of the Crimson King</h3>
-                    <p>Artist: King Crimson</p>
-                    <p>Release Year: 1969</p>
-                </div>
-                <!-- Add more album items as needed -->
             </div>
         </section>
     </main>
