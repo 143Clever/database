@@ -39,19 +39,25 @@ main {
 .album-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    justify-content: center; /* 使内容居中 */
 }
 
 .album-item {
-    flex: 1 1 200px;
-    border: 1px solid #1D1D1F;
+    flex: 1 1 30%;
+    box-sizing: border-box;
+    margin: 10px;
     padding: 10px;
+    border: 1px solid black; /* 黑色边框 */
     text-align: center;
+    max-width: 300px; /* 限制最大宽度 */
 }
 
 .album-item img {
-    max-width: 100%;
+    width: 70%;
     height: auto;
+    max-height: 300px; /* 限制图片高度 */
+    display: block;
+    margin: 0 auto;
 }
 
 .error {

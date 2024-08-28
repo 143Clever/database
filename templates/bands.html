@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Hometown - Bands</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
     <header>
@@ -22,20 +22,23 @@
     <main>
         <section id="bands">
             <h2>Bands</h2>
+            <form method="GET" action="/bands">
+                <input type="text" name="search" placeholder="Search for bands...">
+                <button type="submit">Search</button>
+            </form>
             <div class="band-list">
-                <div class="band-item">
-                    <img src="{{ url_for('static', filename='images/Pink-Floyd.webp') }}" alt="Pink Floyd">
-                    <h3>Pink Floyd</h3>
-                    <p>Genre: Progressive Rock</p>
-                    <p>Years Active: 1970 - 1990</p>
-                </div>
-                <div class="band-item">
-                    <img src="{{ url_for('static', filename='images/nirvana.jpg') }}" alt="Nirvana">
-                    <h3>Nirvana</h3>
-                    <p>Genre: Grunge</p>
-                    <p>Years Active: 1987 - 1994</p>
-                </div>
-                <!-- Add more band items as needed -->
+                {% if bands %}
+                    {% for band in bands %}
+                        <div class="band-item">
+                            <img src="{{ url_for('static', filename='images/' + band['image']) }}" alt="{{ band['band_name'] }}">
+                            <h3>{{ band['band_name'] }}</h3>
+                            <p>Genre: {{ band['genre'] }}</p>
+                            <p>Formed Year: {{ band['formed_year'] }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No bands found.</p>
+                {% endif %}
             </div>
         </section>
     </main>

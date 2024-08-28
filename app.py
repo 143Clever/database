@@ -3,6 +3,7 @@ import sqlite3
 
 app = Flask(__name__)
 
+
 def get_db_connection():
     conn = sqlite3.connect('music.db')
     conn.row_factory = sqlite3.Row
@@ -12,24 +13,43 @@ def get_db_connection():
 def index():
     return render_template('index.html')
 
-@app.route('/albums', methods=['GET'])
-def albums():
-    search = request.args.get('search')
+@app.route('/bands')
+def bands():
     conn = get_db_connection()
-    
-    if search:
-        search = search.lower()
-        albums = conn.execute("SELECT * FROM album WHERE lower(album_name) LIKE ?", ('%' + search + '%',)).fetchall()
+    bands = conn.execute('SELECT * FROM band').fetchall()
+    conn.close()
+    return render_template('bands.html', bands=bands)
+
+@app.route('/albums')
+def albums():
+    search_query = request.args.get('search', '').strip().lower()
+    conn = get_db_connection()
+
+    if search_query:
+        albums = conn.execute('SELECT * FROM album WHERE LOWER(album_name) LIKE ?', ('%' + search_query + '%',)).fetchall()
     else:
         albums = conn.execute('SELECT * FROM album').fetchall()
     
     conn.close()
     return render_template('albums.html', albums=albums)
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
-@app.route('/bands')
+@app.route('/timeline')
+def timeline():
+    return render_template('timeline.html')
+@app.route('/bands', methods=['GET'])
 def bands():
-    return render_template('bands.html')
+    search_query = request.args.get('search')
+    conn = get_db_connection()
+
+    if search_query:
+        query = "SELECT * FROM band WHERE band_name LIKE ?"
+        bands = conn.execute(query, ('%' + search_query + '%',)).fetchall()
+    else:
+        bands = conn.execute("SELECT * FROM band").fetchall()
+
+    conn.close()
+    return render_template('bands.html', bands=bands)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

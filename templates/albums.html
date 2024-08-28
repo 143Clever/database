@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Hometown - Albums</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
@@ -30,7 +30,7 @@
                 {% if albums %}
                     {% for album in albums %}
                         <div class="album-item">
-                            <img src="{{ album['image'] }}" alt="{{ album['album_name'] }}">
+                            <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}">
                             <h3>{{ album['album_name'] }}</h3>
                             <p>Artist: {{ album['band_name'] }}</p>
                             <p>Release Year: {{ album['released_year'] }}</p>
