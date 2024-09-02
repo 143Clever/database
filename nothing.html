@@ -1,15 +1,68 @@
-<div class="album-list">
-    <div class="album-item">
-        <img src="../static/images/abbey.jpg" alt="Album 1">
-        <h3>Abbey Road</h3>
-        <p>Artist: The Beatles</p>
-        <p>Release Year: 1969</p>
-    </div>
-    <div class="album-item">
-        <img src="../static/images/king.jpg" alt="Album 2">
-        <h3>In the Court of the Crimson King</h3>
-        <p>Artist: King Crimson</p>
-        <p>Release Year: 1969</p>
-    </div>
-    <!-- Add more album items as needed -->
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Hometown - Album Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Rock Hometown</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('bands') }}">Bands</a></li>
+                <li><a href="{{ url_for('albums') }}">Albums</a></li>
+                <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="album-details">
+            <h2>Search Results</h2>
+            <div class="album-list">
+                {% for album in albums %}
+                <div class="album-item">
+                    <img src="../static/images/{{ album[5] }}" alt="{{ album[1] }}">
+                    <h3>{{ album[2] }}</h3>
+                    <p>Artist: {{ album[1] }}</p>
+                    <p>Release Year: {{ album[3] }}</p>
+                    <p>Genre: {{ album[4] }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Rock Hometown</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="bands.html">Bands</a></li>
+                <li><a href="albums.html">Albums</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="error-page">
+            <h2>Page Not Found</h2>
+            <p>Sorry, the page you are looking for does not exist.</p>
+        </section>
+    </main>
+</body>
+</html> `

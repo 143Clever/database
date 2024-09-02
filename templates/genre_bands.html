@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ genre_name }} Bands</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>{{ genre_name }} Bands</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('genres') }}">Genres</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="bands">
+            <h2>Bands under {{ genre_name }}</h2>
+            <div class="band-list">
+                {% if bands %}
+                    {% for band in bands %}
+                        <div class="band-item">
+                            <p>{{ band['band_name'] }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No bands found for this genre.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

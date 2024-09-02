@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import sqlite3
+import os
 
 app = Flask(__name__)
 
-
+# 获取数据库连接
 def get_db_connection():
     conn = sqlite3.connect('music.db')
     conn.row_factory = sqlite3.Row
@@ -13,10 +14,34 @@ def get_db_connection():
 def index():
     return render_template('index.html')
 
+@app.route('/genre')
+def genre():
+    conn = get_db_connection()
+    genre = conn.execute('SELECT genre_id, genre_name FROM genre').fetchall()
+    conn.close()
+    return render_template('genre.html', genre=genre)
+
+@app.route('/genres/<int:genre_id>')
+def genre_bands(genre_id):
+    conn = get_db_connection()
+    genre = conn.execute('SELECT genre_name FROM genre WHERE genre_id = ?', (genre_id,)).fetchone()
+    bands = conn.execute('SELECT band_name FROM band WHERE genre_id = ?', (genre_id,)).fetchall()
+    conn.close()
+
+    if genre is None:
+        return render_template('404.html'), 404
+    
+    return render_template('genre_bands.html', genre_name=genre['genre_name'], bands=bands)
+
 @app.route('/bands')
 def bands():
+    search_query = request.args.get('search', '').strip().lower()
     conn = get_db_connection()
     bands = conn.execute('SELECT * FROM band').fetchall()
+    if search_query:
+        bands = conn.execute('SELECT * FROM band WHERE LOWER(band_name) LIKE ?', ('%' + search_query + '%',)).fetchall()
+    else:
+        bands = conn.execute('SELECT * FROM band').fetchall()
     conn.close()
     return render_template('bands.html', bands=bands)
 
@@ -36,20 +61,10 @@ def albums():
 @app.route('/timeline')
 def timeline():
     return render_template('timeline.html')
-@app.route('/bands', methods=['GET'])
-def bands():
-    search_query = request.args.get('search')
-    conn = get_db_connection()
 
-    if search_query:
-        query = "SELECT * FROM band WHERE band_name LIKE ?"
-        bands = conn.execute(query, ('%' + search_query + '%',)).fetchall()
-    else:
-        bands = conn.execute("SELECT * FROM band").fetchall()
-
-    conn.close()
-    return render_template('bands.html', bands=bands)
-
+@app.route('/images/<filename>')
+def image(filename):
+    return send_from_directory('static/images', filename)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -39,7 +39,7 @@ main {
 .album-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* 使内容居中 */
+    justify-content: center; 
 }
 
 .album-item {
@@ -66,14 +66,18 @@ main {
 }
 .band-list {
     display: flex;
-    justify-content: center; /* Centers items horizontally */
-    flex-wrap: wrap; /* Allows items to wrap to the next line */
-    gap: 20px; /* Adds space between items */
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .band-item {
-    width: 200px; /* Fixed width for consistency */
+    flex: 1 1 30%;
+    box-sizing: border-box;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black; /* 黑色边框 */
     text-align: center;
+    max-width: 300px;
 }
 
 .band-item img {
@@ -86,4 +90,30 @@ main {
 /* Ensures text is horizontally aligned */
 .band-item h3, .band-item p {
     margin: 5px 0;
+}
+
+
+#genres h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.genre-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.genre-item {
+    padding: 10px 15px;
+    border: 1px solid #000;
+    width: 100%;
+    text-align: center;
+    background-color: #e0e0e0;
+    transition: background-color 0.3s ease;
+}
+
+.genre-item:hover {
+    background-color: #d0d0d0;
 }

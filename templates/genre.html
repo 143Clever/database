@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Hometown - Album Details</title>
+    <title>Rock Hometown - Genres</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles.css">
 </head>
@@ -20,17 +20,13 @@
         </nav>
     </header>
     <main>
-        <section id="album-details">
-            <h2>Search Results</h2>
-            <div class="album-list">
-                {% for album in albums %}
-                <div class="album-item">
-                    <img src="../static/images/{{ album[5] }}" alt="{{ album[1] }}">
-                    <h3>{{ album[2] }}</h3>
-                    <p>Artist: {{ album[1] }}</p>
-                    <p>Release Year: {{ album[3] }}</p>
-                    <p>Genre: {{ album[4] }}</p>
-                </div>
+        <section id="genre">
+            <h2>Genre</h2>
+            <div class="genre-list">
+                {% for genre in genre %}
+                    <div class="genre-item">
+                        <p>{{ genre['genre_id'] }} - {{ genre['genre_name'] }}</p>
+                    </div>
                 {% endfor %}
             </div>
         </section>
