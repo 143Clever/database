@@ -17,22 +17,16 @@ def index():
 @app.route('/genre')
 def genre():
     conn = get_db_connection()
-    genre = conn.execute('SELECT genre_id, genre_name FROM genre').fetchall()
+    genre = conn.execute('SELECT * FROM genre').fetchall()
     conn.close()
     return render_template('genre.html', genre=genre)
 
-@app.route('/genres/<int:genre_id>')
+@app.route('/genre/<int:genre_id>')
 def genre_bands(genre_id):
     conn = get_db_connection()
-    genre = conn.execute('SELECT genre_name FROM genre WHERE genre_id = ?', (genre_id,)).fetchone()
-    bands = conn.execute('SELECT band_name FROM band WHERE genre_id = ?', (genre_id,)).fetchall()
+    bands = conn.execute('SELECT * FROM band WHERE genre_id = ?', (genre_id,)).fetchall()
     conn.close()
-
-    if genre is None:
-        return render_template('404.html'), 404
-    
-    return render_template('genre_bands.html', genre_name=genre['genre_name'], bands=bands)
-
+    return render_template('genre_bands.html', bands=bands)
 @app.route('/bands')
 def bands():
     search_query = request.args.get('search', '').strip().lower()

@@ -3,32 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ genre_name }} Bands</title>
+    <title>Rock Hometown - Bands in Genre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
     <header>
-        <h1>{{ genre_name }} Bands</h1>
+        <h1>Rock Hometown</h1>
         <nav>
             <ul>
                 <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('genres') }}">Genres</a></li>
+                <li><a href="{{ url_for('bands') }}">Bands</a></li>
+                <li><a href="{{ url_for('albums') }}">Albums</a></li>
+                <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
+                <li><a href="{{ url_for('genre') }}">Genre</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <section id="bands">
-            <h2>Bands under {{ genre_name }}</h2>
+            <h2>Bands in {{ genre_name }}</h2>
             <div class="band-list">
-                {% if bands %}
-                    {% for band in bands %}
-                        <div class="band-item">
-                            <p>{{ band['band_name'] }}</p>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No bands found for this genre.</p>
-                {% endif %}
+                {% for band in bands %}
+                    <div class="band-item">
+                        <img src="{{ url_for('static', filename='images/' + band['image']) }}" alt="{{ band['band_name'] }}">
+                        <h3>{{ band['band_name'] }}</h3>
+                        <p>Formed Year: {{ band['formed_year'] }}</p>
+                    </div>
+                {% endfor %}
             </div>
         </section>
     </main>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Hometown - Genres</title>
+    <title>Rock Hometown - Genre</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles.css">
 </head>
@@ -15,7 +15,9 @@
                 <li><a href="{{ url_for('index') }}">Home</a></li>
                 <li><a href="{{ url_for('bands') }}">Bands</a></li>
                 <li><a href="{{ url_for('albums') }}">Albums</a></li>
+                <li><a href="{{ url_for('genre') }}">Genre</a></li>
                 <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
+                
             </ul>
         </nav>
     </header>
@@ -24,9 +26,9 @@
             <h2>Genre</h2>
             <div class="genre-list">
                 {% for genre in genre %}
-                    <div class="genre-item">
-                        <p>{{ genre['genre_id'] }} - {{ genre['genre_name'] }}</p>
-                    </div>
+                    <a href="{{ url_for('genre_bands', genre_id=genre['genre_id']) }}" class="genre-item">
+                        <h3>{{ genre['genre_name'] }}</h3>
+                    </a>
                 {% endfor %}
             </div>
         </section>
