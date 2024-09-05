@@ -27,6 +27,7 @@ def genre_bands(genre_id):
     bands = conn.execute('SELECT * FROM band WHERE genre_id = ?', (genre_id,)).fetchall()
     conn.close()
     return render_template('genre_bands.html', bands=bands)
+
 @app.route('/bands')
 def bands():
     search_query = request.args.get('search', '').strip().lower()

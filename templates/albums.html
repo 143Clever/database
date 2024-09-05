@@ -12,21 +12,23 @@
         <h1>Rock Hometown</h1>
         <nav>
             <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('bands') }}">Bands</a></li>
-                <li><a href="{{ url_for('albums') }}">Albums</a></li>
-                <li><a href="{{ url_for('genre') }}">Genre</a></li>
-                <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
+                <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Home</a></li>
+                <li><a href="{{ url_for('bands') }}" class="{% if request.endpoint == 'bands' %}active{% endif %}">Bands</a></li>
+                <li><a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albums</a></li>
+                <li><a href="{{ url_for('genre') }}" class="{% if request.endpoint == 'genre' %}active{% endif %}">Genre</a></li>
+                <li><a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Timeline</a></li>
+                
             </ul>
         </nav>
     </header>
     <main>
         <section id="albums">
-            <h2>Albums</h2>
-            <form method="GET" action="/albums">
-                <input type="text" name="search" placeholder="Search for albums...">
-                <button type="submit">Search</button>
+            <h2 class="albums-title">Albums</h2>
+            <form method="GET" action="/albums" class="search-form">
+                <input type="text" name="search" placeholder="Search for albums..." class="search-input">
+                <button type="submit" class="search-button">Search</button>
             </form>
+            
             <div class="album-list">
                 {% if albums %}
                     {% for album in albums %}

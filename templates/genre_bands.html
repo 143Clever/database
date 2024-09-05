@@ -12,11 +12,12 @@
         <h1>Rock Hometown</h1>
         <nav>
             <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('bands') }}">Bands</a></li>
-                <li><a href="{{ url_for('albums') }}">Albums</a></li>
-                <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
-                <li><a href="{{ url_for('genre') }}">Genre</a></li>
+                <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Home</a></li>
+                <li><a href="{{ url_for('bands') }}" class="{% if request.endpoint == 'bands' %}active{% endif %}">Bands</a></li>
+                <li><a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albums</a></li>
+                <li><a href="{{ url_for('genre') }}" class="{% if request.endpoint == 'genre' %}active{% endif %}">Genre</a></li>
+                <li><a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Timeline</a></li>
+                
             </ul>
         </nav>
     </header>
@@ -25,11 +26,13 @@
             <h2>Bands in {{ genre_name }}</h2>
             <div class="band-list">
                 {% for band in bands %}
-                    <div class="band-item">
-                        <img src="{{ url_for('static', filename='images/' + band['image']) }}" alt="{{ band['band_name'] }}">
-                        <h3>{{ band['band_name'] }}</h3>
-                        <p>Formed Year: {{ band['formed_year'] }}</p>
-                    </div>
+                <div class="band-item">
+                    <h3>{{ band['band_name'] }}</h3>
+                    <p>Formed Year: {{ band['formed_year'] }}</p>
+                    <p>Genre: {{ band['genre_name'] }}</p>
+                    <p>Band ID: {{ band['band_id'] }}</p>
+                    <img src="{{ url_for('static', filename='images/' + band['image']) }}" alt="{{ band['band_name'] }}">
+                </div>
                 {% endfor %}
             </div>
         </section>
