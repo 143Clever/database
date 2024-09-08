@@ -233,3 +233,21 @@ nav ul li a.active {
     background-color: #FBFBFD; /* 按钮背景变为白色 */
     color: #1D1D1F; /* 文字变为深色 */
 }
+
+
+button, .btn {
+    background-color: #1D1D1F; /* 默认黑色背景 */
+    color: #FBFBFD; /* 默认白色字体 */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s; /* 动画效果 */
+}
+
+button:hover,
+.btn:hover {
+    background-color: #FBFBFD; /* 鼠标悬停时背景变为白色 */
+    color: #1D1D1F; /* 鼠标悬停时字体变为黑色 */
+}
