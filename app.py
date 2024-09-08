@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for, session
+from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import os
 
 app = Flask(__name__)
 
-# 获取数据库连接
+
 def get_db_connection():
     conn = sqlite3.connect('music.db')
     conn.row_factory = sqlite3.Row
@@ -60,6 +61,29 @@ def timeline():
 @app.route('/images/<filename>')
 def image(filename):
     return send_from_directory('static/images', filename)
+
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # 处理登录逻辑
+        username = request.form['username']
+        password = request.form['password']
+        # 在这里添加处理逻辑
+        return redirect(url_for('index'))  # 登录后重定向到首页
+    return render_template('login.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        # 处理注册逻辑
+        username = request.form['username']
+        password = request.form['password']
+        # 在这里添加处理逻辑
+        return redirect(url_for('index'))  # 注册后重定向到首页
+    return render_template('signup.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
