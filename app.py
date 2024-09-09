@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 def get_db_connection():
-    conn = sqlite3.connect('music.db')
+    conn = sqlite3.connect('music.db', timeout=5)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -58,9 +58,8 @@ def albums():
 def timeline():
     return render_template('timeline.html')
 
-@app.route('/images/<filename>')
-def image(filename):
-    return send_from_directory('static/images', filename)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     message = None  # 默认消息为空
@@ -99,46 +98,36 @@ def login():
 
     return render_template('login.html', message=message)
 
+
+
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    message = ""
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        # 检查用户名和密码是否为空
-        if not username or not password:
-            return 'Username and password cannot be empty'
-
-        # 使用 werkzeug 的默认密码加密算法
-        hashed_password = generate_password_hash(password)
-
+        # 检查是否存在相同的用户名
+        conn = get_db_connection()
         try:
-            # 连接数据库
-            conn = sqlite3.connect('music.db')
-            cursor = conn.cursor()
-
-            # 插入用户数据
-            cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_password))
-            
-            # 提交更改
+            conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
             conn.commit()
-
-            # 确认用户添加成功
-            print("User added successfully:", username)
-
-        except sqlite3.Error as e:
-            print("Error occurred:", e)
-            return 'Failed to sign up, please try again later'
-
+            message = 'Signup successful!'  # 注册成功的消息
+        except sqlite3.IntegrityError:  # 捕获 UNIQUE 约束失败错误
+            message = 'Username already exists, please choose another one.'
         finally:
-            # 关闭连接
             conn.close()
 
-        return redirect(url_for('login'))
+    # 如果出错或成功，都会显示相应的消息
+    return render_template('signup.html', message=message)
 
-    return render_template('signup.html')
 
-
+def enable_wal_mode():
+    conn = get_db_connection()
+    conn.execute('PRAGMA journal_mode=WAL;')
+    conn.close()
 
 if __name__ == '__main__':
     app.run(debug=True)

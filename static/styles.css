@@ -251,3 +251,15 @@ button:hover,
     background-color: #FBFBFD; /* 鼠标悬停时背景变为白色 */
     color: #1D1D1F; /* 鼠标悬停时字体变为黑色 */
 }
+
+.success-message {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}

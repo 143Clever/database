@@ -30,6 +30,10 @@
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Sign Up</button>
         </form>
+        {% if message %}
+        <p style="color: green;">{{ message }}</p>
+    {% endif %}
+
         <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
     </main>
 </body>
