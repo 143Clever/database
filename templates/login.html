@@ -16,12 +16,10 @@
                 <li><a href="{{ url_for('bands') }}">Bands</a></li>
                 <li><a href="{{ url_for('albums') }}">Albums</a></li>
                 <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
+                <a href="{{ url_for('login') }}" class="btn">Login</a>
+            <a href="{{ url_for('signup') }}" class="btn">Sign Up</a>
             </ul>
         </nav>
-        <div>
-            <a href="{{ url_for('login') }}" class="btn">Login</a>
-            <a href="{{ url_for('signup') }}" class="btn">Sign Up</a>
-        </div>
     </header>
     <main>
         <h1>Login</h1>
@@ -39,6 +37,9 @@
         <p style="color: green;">{{ message }}</p>
     {% endif %}
         <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+
+
+        <p>Haven't signed up? <a href="{{ url_for('signup') }}">Sign up here</a></p>
     </main>
 </body>
 </html>

@@ -249,7 +249,8 @@ button, .btn {
 button:hover,
 .btn:hover {
     background-color: #FBFBFD; /* 鼠标悬停时背景变为白色 */
-    color: #1D1D1F; /* 鼠标悬停时字体变为黑色 */
+    color: #1D1D1F; 
+    border: 1px solid #1D1D1F;
 }
 
 .success-message {
@@ -262,4 +263,66 @@ button:hover,
     color: red;
     font-weight: bold;
     margin-top: 10px;
+}
+
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.delete-btn {
+    background-color: #ff4c4c;
+}
+
+.delete-btn:hover {
+    background-color: #FBFBFD;
+    color: #ff4c4c;
+    border: 1px solid #ff4c4c;
+}
+
+.center-title {
+    text-align: center;
+    font-size: 24px;
+    color: #1D1D1F;
+    margin-bottom: 20px;
+}
+
+/* Account Info */
+.account-info {
+    border: 1px solid #1D1D1F;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #FFFFFF;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
 }

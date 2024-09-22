@@ -24,7 +24,7 @@
             text-align: center;
         }
         #home h2, #home p {
-            color: #FBFBFD; /* Adjust text color for contrast against background */
+            color: #FBFBFD; 
         }
     </style>
 </head>
@@ -38,12 +38,16 @@
                 <li><a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albums</a></li>
                 <li><a href="{{ url_for('genre') }}" class="{% if request.endpoint == 'genre' %}active{% endif %}">Genre</a></li>
                 <li><a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Timeline</a></li>
-                
+                <nav>
+                    {% if 'username' in session %}
+                      <li><a href="{{ url_for('account') }}" class="{% if request.endpoint == 'account' %}active{% endif %}">{{ session['username'] }}</a></li>
+                      
+                    {% else %}
+                      <li><a href="{{ url_for('login') }}" class="{% if request.endpoint == 'login' %}active{% endif %}">Login</a></li>
+                      <li><a href="{{ url_for('signup') }}" class="{% if request.endpoint == 'signup' %}active{% endif %}">Sign Up</a></li>
+                    {% endif %}
+                  </nav>
             </ul>
-            <div>
-                <a href="{{ url_for('login') }}" class="btn">Login</a>
-                <a href="{{ url_for('signup') }}" class="btn">Sign Up</a>
-            </div>
         </nav>
     </header>
     <main>

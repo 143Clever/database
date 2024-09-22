@@ -27,7 +27,9 @@
             <div class="band-list">
                 {% for band in bands %}
                 <div class="band-item">
-                    <h3>{{ band['band_name'] }}</h3>
+                    <a href="{{ url_for('band_albums', band_id=band['band_id']) }}">
+                        <h2>{{ band['band_name'] }}</h2>
+                    </a>
                     <p>Formed Year: {{ band['formed_year'] }}</p>
                     <p>Genre: {{ band['genre_name'] }}</p>
                     <p>Band ID: {{ band['band_id'] }}</p>
