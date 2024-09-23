@@ -81,9 +81,21 @@ def login_required(f):
 
 @app.route('/account')
 def account():
-    if 'username' not in session:
-        return redirect(url_for('login'))  
+    user_id = session['user_id']
     username = session['username']
+    conn = sqlite3.connect('music.db')
+    cursor = conn.cursor()
+    
+    # 获取用户收藏的专辑
+    cursor.execute('''
+        SELECT album.album_id, album.album_name, album.image, album.band_name, album.released_year 
+        FROM album 
+        JOIN favorites ON album.album_id = favorites.album_id 
+        WHERE favorites.user_id = ?
+    ''', (user_id,))
+    
+    favorite_albums = cursor.fetchall()
+    conn.close()
     return render_template('account.html', username=username)
 
 
@@ -266,9 +278,9 @@ def favorite(album_id):
     try:
         conn.execute("INSERT INTO favorites (user_id, album_id) VALUES (?, ?)", (user_id, album_id))
         conn.commit()
-        message = "Album added to favorites!"  # 添加成功的消息
+        message = "Album added to favorites!"
     except sqlite3.IntegrityError:
-        message = "Album already in favorites."  # 如果专辑已存在于收藏中的消息
+        message = "Album already in favorites."
     finally:
         conn.close()
     

@@ -37,20 +37,66 @@
                 </select>
             </form>
             <div class="album-list">
+                {% if message %}
+        <div class="alert">
+            {{ message }}
+        </div>
+    {% endif %}
                 {% if albums %}
                     {% for album in albums %}
-                        <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post" class="album-card" onsubmit="return confirm('Are you sure you want to add this album to favorites?');">
+                        <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post" class="album-card">
                             <input type="hidden" name="album_id" value="{{ album[0] }}">
-                            <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}" ondblclick="this.closest('form').submit()">
-                            <h3>{{ album['album_name'] }}</h3>
-                            <p>Artist: {{ album['band_name'] }}</p>
-                            <p>Release Year: {{ album['released_year'] }}</p>
+                            <label for="album{{ album[0] }}">
+                                <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}" class="album-image">
+                                <h3>{{ album['album_name'] }}</h3>
+                                <p>Artist: {{ album['band_name'] }}</p>
+                                <p>Release Year: {{ album['released_year'] }}</p>
+                            </label>
+                            <input type="submit" id="album{{ album[0] }}" class="hidden-submit">
                         </form>
                     {% endfor %}
                 {% else %}
                     <p>No albums found.</p>
                 {% endif %}
             </div>
+            <style>
+                .album-card {
+                    position: relative;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    transition: background-color 0.5s ease;
+                }
+                
+                .album-card:hover {
+                    background-color: #f0f0f0;
+                }
+                
+                .album-card:active {
+                    background-color: red; /* 提交后背景颜色变为红色 */
+                }
+                
+                .album-image {
+                    width: 100px;
+                    height: 100px;
+                    object-fit: cover;
+                }
+                
+                .hidden-submit {
+                    display: none;
+                }
+                
+                .album-card form:active {
+                    background-color: red;
+                }
+                .alert {
+    background-color: green;
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+                </style>
         </section>
     </main>
 </body>
