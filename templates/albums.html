@@ -24,15 +24,22 @@
     <main>
         <section id="albums">
             <h2 class="albums-title">Albums</h2>
+            
             <form method="GET" action="/albums" class="search-form">
                 <input type="text" name="search" placeholder="Search for albums..." class="search-input">
                 <button type="submit" class="search-button">Search</button>
             </form>
-            
+            <form method="GET" action="{{ url_for('albums') }}">
+                <label for="sort">Sort by:</label>
+                <select name="sort" id="sort" onchange="this.form.submit()">
+                    <option value="released_year" {% if sort_by == 'released_year' %}selected{% endif %}>Release Year</option>
+                    <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Album Name</option>
+                </select>
+            </form>
             <div class="album-list">
                 {% if albums %}
                     {% for album in albums %}
-                        <div class="album-item">
+                        <div class="album-card">
                             <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}">
                             <h3>{{ album['album_name'] }}</h3>
                             <p>Artist: {{ album['band_name'] }}</p>

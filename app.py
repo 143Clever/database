@@ -101,11 +101,8 @@ def delete_account():
         cursor.execute("DELETE FROM users WHERE username = ?", (username,))
         conn.commit()
 
-       
         cursor.close()
         conn.close()
-
-        
         session.pop('username', None)
 
         
@@ -162,6 +159,14 @@ def enable_wal_mode():
     conn.execute('PRAGMA journal_mode=WAL;')
     conn.close()
 
+
+
+
+
+
+
+
+
 @app.route('/genre')
 @login_required
 def genre():
@@ -178,6 +183,11 @@ def genre_bands(genre_id):
     conn.close()
     return render_template('genre_bands.html', bands=bands)
 
+
+
+
+
+
 @app.route('/bands')
 @login_required
 def bands():
@@ -191,37 +201,55 @@ def bands():
     conn.close()
     return render_template('bands.html', bands=bands)
 
+
+
 @app.route('/band_albums/<int:band_id>')
+@login_required
 def band_albums(band_id):
+    sort_by = request.args.get('sort', 'released_year')
     conn = sqlite3.connect('music.db')
-    cursor = conn.cursor()
-    
-    # 获取该乐队的专辑
-    cursor.execute("SELECT album_name, released_year, image FROM album WHERE band_id = ?", (band_id,))
-    albums = cursor.fetchall()
-    
-    # 获取乐队名称
-    cursor.execute("SELECT band_name FROM band WHERE band_id = ?", (band_id,))
-    band_name = cursor.fetchone()[0]
-    
+ 
+    albums = conn.execute(
+        'SELECT album_name, released_year, image FROM album WHERE band_id = ? ORDER BY released_year',
+        (band_id,)
+    ).fetchall()
+
     conn.close()
     
-    return render_template('band_albums.html', albums=albums, band_name=band_name)
+    return render_template('band_albums.html', albums=albums)
+
+
 
 
 @app.route('/albums')
 @login_required
 def albums():
-    search_query = request.args.get('search', '').strip().lower()
+    search_query = request.args.get('search', '').strip().lower() 
+    sort_by = request.args.get('sort', 'released_year')  
+
     conn = get_db_connection()
 
-    if search_query:
-        albums = conn.execute('SELECT * FROM album WHERE LOWER(album_name) LIKE ?', ('%' + search_query + '%',)).fetchall()
-    else:
-        albums = conn.execute('SELECT * FROM album').fetchall()
     
+    if search_query:
+        if sort_by == 'name':
+            albums = conn.execute(
+                'SELECT * FROM album WHERE LOWER(album_name) LIKE ? ORDER BY album_name',
+                ('%' + search_query + '%',)
+            ).fetchall()
+        else:
+            albums = conn.execute(
+                'SELECT * FROM album WHERE LOWER(album_name) LIKE ? ORDER BY released_year',
+                ('%' + search_query + '%',)
+            ).fetchall()
+    else:
+        if sort_by == 'name':
+            albums = conn.execute('SELECT * FROM album ORDER BY album_name').fetchall()
+        else:
+            albums = conn.execute('SELECT * FROM album ORDER BY released_year').fetchall()
+
     conn.close()
-    return render_template('albums.html', albums=albums)
+    return render_template('albums.html', albums=albums, sort_by=sort_by, search_query=search_query)
+
 
 @app.route('/timeline')
 @login_required

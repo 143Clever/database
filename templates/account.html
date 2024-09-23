@@ -9,26 +9,19 @@
 <body>
     <div class="container">
         <h2 class="center-title">Account</h2>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Home</a></li>
-                <li><a href="{{ url_for('bands') }}" class="{% if request.endpoint == 'bands' %}active{% endif %}">Bands</a></li>
-                <li><a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albums</a></li>
-                <li><a href="{{ url_for('genre') }}" class="{% if request.endpoint == 'genre' %}active{% endif %}">Genre</a></li>
-                <li><a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Timeline</a></li>
-                <li><a href="{{ url_for('account') }}" class="{% if request.endpoint == 'account' %}active{% endif %}">{{ session['username'] }}</a></li>
-            </ul>
-        </nav>
+       
         <div class="account-info">
             <p><strong>Username:</strong> {{ session['username'] }}</p>
         </div>
 
         <div class="account-actions">
             <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+            <a href="{{ url_for('index') }}" class="btn">Back Home</a>
         </div>
         <form method="POST" action="{{ url_for('delete_account') }}">
             <button type="submit" class="btn delete-btn">Delete Account</button>
         </form>
     </div>
+    
 </body>
 </html>

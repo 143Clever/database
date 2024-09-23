@@ -3,24 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ band_name }}'s Albums</title>
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Band Albums</title>
+    
 </head>
 <body>
-    <h2>{{ band_name }}'s Albums</h2>
-    <div class="album-container">
+    
+    <h1 class="page-title">Albums by them</h1>
+    <div class="album-grid">
         {% for album in albums %}
             <div class="album-card">
-                <img src="{{ url_for('static', filename='images/' + album[2]) }}" alt="{{ album[0] }}">
-
-                <h2>{{ album[0] }}</h2>
-            <p>Released: {{ album[1] }}</p>
+                <div class="album-image-container">
+                    <img src="{{ url_for('static', filename='images/' + album[2]) }}" alt="{{ album[0] }}" class="album-image">
+                </div>
+                <h2 class="album-title">{{ album[0] }}</h2>
+                <p class="album-year">Released: {{ album[1] }}</p>
             </div>
         {% endfor %}
     </div>
-    
    
-    <li><a href="{{ url_for('bands') }}" class="{% if request.endpoint == 'bands' %}active{% endif %}">Back to Bands</a></li>
-
+    <div class="back-button">
+        <a href="{{ url_for('bands') }}" class="btn">Back to Bands</a>
+    </div>
 </body>
 </html>
