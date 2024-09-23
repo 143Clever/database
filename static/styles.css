@@ -467,3 +467,7 @@ select {
     background-color: #1D1D1F;
     color: #FBFBFD; 
 }
+
+.favorited {
+    background-color: red; /* 双击后的背景色 */
+}

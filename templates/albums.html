@@ -39,12 +39,13 @@
             <div class="album-list">
                 {% if albums %}
                     {% for album in albums %}
-                        <div class="album-card">
-                            <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}">
+                        <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post" class="album-card" onsubmit="return confirm('Are you sure you want to add this album to favorites?');">
+                            <input type="hidden" name="album_id" value="{{ album[0] }}">
+                            <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}" ondblclick="this.closest('form').submit()">
                             <h3>{{ album['album_name'] }}</h3>
                             <p>Artist: {{ album['band_name'] }}</p>
                             <p>Release Year: {{ album['released_year'] }}</p>
-                        </div>
+                        </form>
                     {% endfor %}
                 {% else %}
                     <p>No albums found.</p>

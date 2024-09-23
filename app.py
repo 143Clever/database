@@ -15,7 +15,7 @@ def get_db_connection():
 
 @app.before_request
 def require_login():
-    # 需要登录的页面列表
+   
     protected_routes = ['bands', 'albums', 'timeline', 'genre', 'genre_bands']
     
     if request.endpoint in protected_routes and 'username' not in session:
@@ -46,15 +46,18 @@ def login():
             conn = sqlite3.connect('music.db')
             cursor = conn.cursor()
 
-            cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
+          
+            cursor.execute("SELECT user_id, password FROM users WHERE username = ?", (username,))
             result = cursor.fetchone()
             conn.close()
 
             if result:
-                stored_hashed_password = result[0]
+                user_id, stored_hashed_password = result
                 if scrypt.verify(password, stored_hashed_password):
+                    
                     session['logged_in'] = True
                     session['username'] = username
+                    session['user_id'] = user_id  
                     message = "Login successful!"
                     return redirect(url_for('index')) 
                 else:
@@ -66,6 +69,7 @@ def login():
             message = f"An error occurred: {e}"
 
     return render_template('login.html', message=message)
+
 
 def login_required(f):
     @wraps(f)
@@ -250,6 +254,30 @@ def albums():
     conn.close()
     return render_template('albums.html', albums=albums, sort_by=sort_by, search_query=search_query)
 
+@app.route('/favorite/<int:album_id>', methods=['POST'])
+@login_required
+def favorite(album_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # 确保用户已登录
+
+    user_id = session['user_id']  # 从会话中获取 user_id
+    conn = sqlite3.connect('music.db')
+    
+    try:
+        conn.execute("INSERT INTO favorites (user_id, album_id) VALUES (?, ?)", (user_id, album_id))
+        conn.commit()
+        message = "Album added to favorites!"  # 添加成功的消息
+    except sqlite3.IntegrityError:
+        message = "Album already in favorites."  # 如果专辑已存在于收藏中的消息
+    finally:
+        conn.close()
+    
+    return redirect(url_for('albums', message=message))  # 重定向回专辑页面
+
+
+
+
+
 
 @app.route('/timeline')
 @login_required
@@ -257,4 +285,5 @@ def timeline():
     return render_template('timeline.html')
 if __name__ == '__main__':
     app.run(debug=True)
+
 
