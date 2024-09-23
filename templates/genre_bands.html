@@ -17,7 +17,7 @@
                 <li><a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albums</a></li>
                 <li><a href="{{ url_for('genre') }}" class="{% if request.endpoint == 'genre' %}active{% endif %}">Genre</a></li>
                 <li><a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Timeline</a></li>
-                
+                <li><a href="{{ url_for('account') }}" class="{% if request.endpoint == 'account' %}active{% endif %}">{{ session['username'] }}</a></li>
             </ul>
         </nav>
     </header>
@@ -26,14 +26,13 @@
             <h2>Bands in {{ genre_name }}</h2>
             <div class="band-list">
                 {% for band in bands %}
-                <div class="band-item">
+                <div class="band-card">
                     <a href="{{ url_for('band_albums', band_id=band['band_id']) }}">
-                        <h2>{{ band['band_name'] }}</h2>
+                        <img src="{{ url_for('static', filename='images/' + band['image']) }}" alt="{{ band['band_name'] }}">
+                        <h3>{{ band['band_name'] }}</h3>
+                        <h4>Formed Year: {{ band['formed_year'] }}</h4>
+                <h5>Genre: {{ band['genre_name'] }}</h5>
                     </a>
-                    <p>Formed Year: {{ band['formed_year'] }}</p>
-                    <p>Genre: {{ band['genre_name'] }}</p>
-                    <p>Band ID: {{ band['band_id'] }}</p>
-                    <img src="{{ url_for('static', filename='images/' + band['image']) }}" alt="{{ band['band_name'] }}">
                 </div>
                 {% endfor %}
             </div>

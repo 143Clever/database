@@ -7,18 +7,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>{{ band_name }}'s Albums</h1>
-    
-    <div class="album-list">
+    <h2>{{ band_name }}'s Albums</h2>
+    <div class="album-container">
         {% for album in albums %}
-        <div class="album-item">
-            <img src="{{ album['image'] }}" alt="{{ album['album_name'] }}">
-            <h2>{{ album['album_name'] }}</h2>
-            <p>Released: {{ album['released_year'] }}</p>
-        </div>
+            <div class="album-card">
+                <img src="{{ url_for('static', filename='images/' + album[2]) }}" alt="{{ album[0] }}">
+
+                <h2>{{ album[0] }}</h2>
+            <p>Released: {{ album[1] }}</p>
+            </div>
         {% endfor %}
     </div>
+    
+   
+    <li><a href="{{ url_for('bands') }}" class="{% if request.endpoint == 'bands' %}active{% endif %}">Back to Bands</a></li>
 
-    <a href="{{ url_for('bands') }}">Back to Bands</a>
 </body>
 </html>

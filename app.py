@@ -178,24 +178,6 @@ def genre_bands(genre_id):
     conn.close()
     return render_template('genre_bands.html', bands=bands)
 
-    
-@app.route('/band_albums/<int:band_id>')
-def band_albums(band_id):
-    conn = sqlite3.connect('music.db')
-    cursor = conn.cursor()
-    
-   
-    cursor.execute("SELECT album_name, released_year, image FROM album WHERE band_id = ?", (band_id,))
-    albums = cursor.fetchall()
-    
-   
-    cursor.execute("SELECT band_name FROM band WHERE band_id = ?", (band_id,))
-    band_name = cursor.fetchone()[0]
-    
-    conn.close()
-    
-    return render_template('band_albums.html', albums=albums, band_name=band_name)
-
 @app.route('/bands')
 @login_required
 def bands():
@@ -208,6 +190,24 @@ def bands():
         bands = conn.execute('SELECT * FROM band').fetchall()
     conn.close()
     return render_template('bands.html', bands=bands)
+
+@app.route('/band_albums/<int:band_id>')
+def band_albums(band_id):
+    conn = sqlite3.connect('music.db')
+    cursor = conn.cursor()
+    
+    # 获取该乐队的专辑
+    cursor.execute("SELECT album_name, released_year, image FROM album WHERE band_id = ?", (band_id,))
+    albums = cursor.fetchall()
+    
+    # 获取乐队名称
+    cursor.execute("SELECT band_name FROM band WHERE band_id = ?", (band_id,))
+    band_name = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    return render_template('band_albums.html', albums=albums, band_name=band_name)
+
 
 @app.route('/albums')
 @login_required
