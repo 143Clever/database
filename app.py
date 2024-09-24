@@ -13,6 +13,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+
 @app.before_request
 def require_login():
    
@@ -23,7 +24,6 @@ def require_login():
 
 
 @app.route('/')
-
 def index():
     if 'username' in session:
         return render_template('index.html', username=session['username'])
@@ -78,6 +78,7 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
+
 
 @app.route('/account')
 @login_required
