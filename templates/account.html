@@ -22,6 +22,55 @@
             <button type="submit" class="btn delete-btn">Delete Account</button>
         </form>
     </div>
+    <div class="album-list">
+        <p>Total albums: {{ favorite_albums|length }}</p>
+        {% if favorite_albums %}
+            {% for album in favorite_albums %}
+                <div class="album-card">
+                    <img src="{{ url_for('static', filename='images/' + album[2]) }}" alt="{{ album[1] }}" class="album-image">
+                    <h3>{{ album[1] }}</h3>
+                    <p>Artist: {{ album[3] }}</p>
+                    <p>Release Year: {{ album[4] }}</p>
+                    <form action="{{ url_for('delete_favorite', album_id=album[0]) }}" method="post">
+                        <input type="hidden" name="album_id" value="{{ album[0] }}">
+                        <button type="submit">Remove from Favorites</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>You have no favorite albums.</p>
+        {% endif %}
+    </div>
     
+    <style>
+    .album-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .album-card {
+        flex: 1 1 calc(33.333% - 20px);
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+    
+    .album-card img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+    
+    .album-card:hover {
+        background-color: #f5f5f5;
+    }
+    
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    </style>
 </body>
 </html>

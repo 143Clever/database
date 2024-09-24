@@ -80,24 +80,32 @@ def login_required(f):
     return decorated_function
 
 @app.route('/account')
+@login_required
 def account():
-    user_id = session['user_id']
-    username = session['username']
+   
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return redirect(url_for('login'))
+
     conn = sqlite3.connect('music.db')
     cursor = conn.cursor()
+
     
-    # 获取用户收藏的专辑
     cursor.execute('''
         SELECT album.album_id, album.album_name, album.image, album.band_name, album.released_year 
         FROM album 
         JOIN favorites ON album.album_id = favorites.album_id 
         WHERE favorites.user_id = ?
     ''', (user_id,))
-    
+
     favorite_albums = cursor.fetchall()
     conn.close()
-    return render_template('account.html', username=username)
 
+  
+    print(favorite_albums)
+
+    return render_template('account.html', username=session['username'], favorite_albums=favorite_albums)
 
 
 
@@ -266,30 +274,58 @@ def albums():
     conn.close()
     return render_template('albums.html', albums=albums, sort_by=sort_by, search_query=search_query)
 
+
+
 @app.route('/favorite/<int:album_id>', methods=['POST'])
 @login_required
 def favorite(album_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))  # 确保用户已登录
+    user_id = session.get('user_id')  
 
-    user_id = session['user_id']  # 从会话中获取 user_id
+    if not user_id:
+        return redirect(url_for('login'))  
+
     conn = sqlite3.connect('music.db')
-    
+    cursor = conn.cursor()
+
     try:
-        conn.execute("INSERT INTO favorites (user_id, album_id) VALUES (?, ?)", (user_id, album_id))
-        conn.commit()
-        message = "Album added to favorites!"
-    except sqlite3.IntegrityError:
-        message = "Album already in favorites."
+       
+        cursor.execute("SELECT * FROM favorites WHERE user_id = ? AND album_id = ?", (user_id, album_id))
+        exists = cursor.fetchone()
+
+        if exists:
+            
+            message = "Album already in favorites."
+        else:
+          
+            cursor.execute("INSERT INTO favorites (user_id, album_id) VALUES (?, ?)", (user_id, album_id))
+            conn.commit()
+            message = "Album added to favorites!"
+    except Exception as e:
+        message = f"An error occurred: {e}"
     finally:
         conn.close()
-    
-    return redirect(url_for('albums', message=message))  # 重定向回专辑页面
 
+    return redirect(url_for('albums', message=message))
 
+@app.route('/delete_favorite/<int:album_id>', methods=['POST'])
+@login_required
+def delete_favorite(album_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
 
+    user_id = session['user_id']
+    conn = sqlite3.connect('music.db')
 
+    try:
+        conn.execute("DELETE FROM favorites WHERE user_id = ? AND album_id = ?", (user_id, album_id))
+        conn.commit()
+        message = "Album removed from favorites!"
+    except Exception as e:
+        message = f"An error occurred: {e}"
+    finally:
+        conn.close()
 
+    return redirect(url_for('account', message=message))
 
 @app.route('/timeline')
 @login_required

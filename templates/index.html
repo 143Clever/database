@@ -15,7 +15,7 @@
             background-size: cover; 
             background-position: center; 
             background-repeat: no-repeat;
-            filter: saturate(25%); 
+            filter: saturate(100%); 
             height: 100vh; 
             display: flex;
             flex-direction: column;
@@ -23,9 +23,21 @@
             align-items: center;
             text-align: center;
         }
-        #home h2, #home p {
-            color: #FBFBFD; 
-        }
+        #home h2 {
+    font-size: 2.5em;                 
+    color: #c0c0c0;                     
+    margin-bottom: 10px;                
+}
+
+#home p {
+    font-size: 1.2em;                
+    color: #c0c0c0;                       
+    line-height: 1.5;                  
+}
+
+#home:hover {
+    background-color: #e6f7ff;         
+}
     </style>
 </head>
 <body>
@@ -53,8 +65,10 @@
     <main>
         <section id="home">
             <h2>Welcome to Rock Hometown</h2>
-            <p>Discover the world of rock music, learn about your favorite bands and albums.</p>
+            <p>Discover the world of rock music.</p>
+            <p>Double click on your favourite album and it will be stored in your favourite.</p>
         </section>
+        
     </main>
 </body>
 </html>

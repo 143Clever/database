@@ -36,6 +36,9 @@
                     <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Album Name</option>
                 </select>
             </form>
+
+
+            
             <div class="album-list">
                 {% if message %}
         <div class="alert">
@@ -44,60 +47,68 @@
     {% endif %}
                 {% if albums %}
                     {% for album in albums %}
-                        <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post" class="album-card">
-                            <input type="hidden" name="album_id" value="{{ album[0] }}">
-                            <label for="album{{ album[0] }}">
-                                <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}" class="album-image">
-                                <h3>{{ album['album_name'] }}</h3>
-                                <p>Artist: {{ album['band_name'] }}</p>
-                                <p>Release Year: {{ album['released_year'] }}</p>
-                            </label>
-                            <input type="submit" id="album{{ album[0] }}" class="hidden-submit">
-                        </form>
+                    <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post" class="album-card-form" onsubmit="return confirm('Are you sure you want to add this album to favorites?');">
+                        <div class="album-card" ondblclick="toggleFavorite(this)">
+                            <img src="{{ url_for('static', filename='images/' + album['image']) }}" alt="{{ album['album_name'] }}">
+                            <h3>{{ album['album_name'] }}</h3>
+                            <p>Artist: {{ album['band_name'] }}</p>
+                            <p>Released Year: {{ album['released_year'] }}</p>
+                        </div>
+                        <input type="hidden" name="album_id" value="{{ album[0] }}">
+                    </form>
                     {% endfor %}
                 {% else %}
                     <p>No albums found.</p>
                 {% endif %}
             </div>
             <style>
-                .album-card {
-                    position: relative;
-                    padding: 10px;
-                    border: 1px solid #ddd;
-                    transition: background-color 0.5s ease;
-                }
-                
-                .album-card:hover {
-                    background-color: #f0f0f0;
-                }
-                
-                .album-card:active {
-                    background-color: red; /* 提交后背景颜色变为红色 */
-                }
-                
-                .album-image {
-                    width: 100px;
-                    height: 100px;
-                    object-fit: cover;
-                }
-                
-                .hidden-submit {
-                    display: none;
-                }
-                
-                .album-card form:active {
-                    background-color: red;
-                }
-                .alert {
-    background-color: green;
-    color: white;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
+                .album-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+.album-card {
+    border: 1px solid black;
+    padding: 15px;
+    margin: 10px;
     text-align: center;
+    width: 200px;
+    transition: transform 0.3s ease;
 }
+
+        .album-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .hidden-checkbox {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .hidden-checkbox:checked + .album-card {
+            background-color: red;
+        }
+        .album-card h3, .album-card p {
+            margin: 10px 0;
+        }
                 </style>
         </section>
     </main>
+    <script>
+        function toggleFavorite(cardElement) {
+           
+            alert('Album has been added to favorites! Check your favorites in your account!');
+            cardElement.classList.toggle('checked');
+
+            
+            cardElement.closest('form').submit();
+        }
+    </script>
 </body>
 </html>
