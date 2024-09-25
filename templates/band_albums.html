@@ -15,13 +15,17 @@
         {% for album in albums %}
             <div class="album-card">
                 <div class="album-image-container">
-                    <img src="{{ url_for('static', filename='images/' + album[2]) }}" alt="{{ album[0] }}" class="album-image">
+                    <img src="{{ url_for('static', filename='images/' + album[2]) }}" alt="{{ album[1] }}" class="album-image">
                 </div>
-                <h2 class="album-title">{{ album[0] }}</h2>
-                <p class="album-year">Released: {{ album[1] }}</p>
+                <h2 class="album-title">{{ album[1] }}</h2>
+                <p class="album-year">Released: {{ album[4] }}</p>
+                <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post">
+                    <button type="submit">Add to Favorites</button>
+                </form>
             </div>
         {% endfor %}
     </div>
+    
    
     <div class="back-button">
         <a href="{{ url_for('bands') }}" class="btn">Back to Bands</a>

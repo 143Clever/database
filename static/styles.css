@@ -480,3 +480,14 @@ select {
 .index-message:hover {
     background-color: #e6f7ff;        
 }
+
+#center-message {
+    justify-content: center;     
+    align-items: center;        
+    text-align: center;            
+    font-family: Arial, sans-serif; 
+}
+#center-message h2 {
+    font-size: 1em;          
+    color: #333;                
+}

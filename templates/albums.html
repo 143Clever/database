@@ -34,10 +34,12 @@
                 <select name="sort" id="sort" onchange="this.form.submit()">
                     <option value="released_year" {% if sort_by == 'released_year' %}selected{% endif %}>Release Year</option>
                     <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Album Name</option>
+                    
                 </select>
             </form>
-
-
+            <section id="center-message">
+                <h2>Double click to add to favourites</h2>
+            </section>
             
             <div class="album-list">
                 {% if message %}
