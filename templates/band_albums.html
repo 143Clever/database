@@ -18,7 +18,7 @@
                     <img src="{{ url_for('static', filename='images/' + album[2]) }}" alt="{{ album[1] }}" class="album-image">
                 </div>
                 <h2 class="album-title">{{ album[1] }}</h2>
-                <p class="album-year">Released: {{ album[4] }}</p>
+                <p class="album-year">Released: {{ album[3] }}</p>
                 <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post">
                     <button type="submit">Add to Favorites</button>
                 </form>

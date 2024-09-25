@@ -8,6 +8,12 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Secret key for sessions and security
 
 
+#404 page
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
 # Database connection function
 def get_db_connection():
     """
@@ -265,7 +271,7 @@ def band_albums(band_id):
     conn = sqlite3.connect('music.db')
     cursor = conn.cursor()
     albums = cursor.execute(
-        'SELECT album.album_id, album.album_name, album.image, album.released_year '
+        'SELECT album.album_id, album.album_name, album.image, released_year '
         'FROM album WHERE band_id = ? ORDER BY released_year',
         (band_id,)
     ).fetchall()
@@ -379,3 +385,6 @@ if __name__ == '__main__':
     Starts the Flask application in debug mode.
     """
     app.run(debug=True)
+
+
+
