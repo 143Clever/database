@@ -1,8 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 from functools import wraps
 import sqlite3
 import os
 from passlib.hash import scrypt
+
+
+USERNAME_MIN_LENGTH = 3
+USERNAME_MAX_LENGTH = 16
+PASSWORD_MIN_LENGTH = 8
+PASSWORD_MAX_LENGTH = 16
+SEARCH_CHAR_LIMIT = 50
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Secret key for sessions and security
@@ -62,6 +69,14 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        if not (USERNAME_MIN_LENGTH <= len(username) <= USERNAME_MAX_LENGTH):
+            flash(f"Username must be between {USERNAME_MIN_LENGTH} and {USERNAME_MAX_LENGTH} characters.")
+            return redirect(url_for('login'))
+        
+        if not (PASSWORD_MIN_LENGTH <= len(password) <= PASSWORD_MAX_LENGTH):
+            flash(f"Password must be between {PASSWORD_MIN_LENGTH} and {PASSWORD_MAX_LENGTH} characters.")
+            return redirect(url_for('login'))
+
         if not username or not password:
             message = "Please provide both username and password."
             return render_template('login.html', message=message)
@@ -91,7 +106,11 @@ def login():
         except Exception as e:
             message = f"An error occurred: {e}"
 
-    return render_template('login.html', message=message)
+    return render_template('login.html', message=message,
+                            username_min_length=USERNAME_MIN_LENGTH,
+                            username_max_length=USERNAME_MAX_LENGTH,
+                            password_min_length=PASSWORD_MIN_LENGTH,
+                            password_max_length=PASSWORD_MAX_LENGTH)
 
 
 # Custom decorator to enforce login
@@ -119,6 +138,8 @@ def account():
     user_id = session.get('user_id')
     if not user_id:
         return redirect(url_for('login'))
+    
+        return redirect(url_for('login'))
 
     conn = sqlite3.connect('music.db')
     cursor = conn.cursor()
@@ -134,7 +155,7 @@ def account():
     favorite_albums = cursor.fetchall()
     conn.close()
 
-    return render_template('account.html', username=session['username'], favorite_albums=favorite_albums)
+    return render_template('account.html', username=session['username'], favorite_albums=favorite_albums,)
 
 
 # Delete account route
@@ -184,6 +205,14 @@ def signup():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        if not (USERNAME_MIN_LENGTH <= len(username) <= USERNAME_MAX_LENGTH):
+            flash(f"Username must be between {USERNAME_MIN_LENGTH} and {USERNAME_MAX_LENGTH} characters.")
+            return redirect(url_for('signup'))
+        
+        if not (PASSWORD_MIN_LENGTH <= len(password) <= PASSWORD_MAX_LENGTH):
+            flash(f"Password must be between {PASSWORD_MIN_LENGTH} and {PASSWORD_MAX_LENGTH} characters.")
+            return redirect(url_for('signup'))
+
         if not username or not password:
             message = "Please provide both username and password."
             return render_template('signup.html', message=message)
@@ -197,13 +226,17 @@ def signup():
             cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, encrypted_password))
             conn.commit()
             conn.close()
-            message = "Signup successful!"
+            return redirect(url_for('login'))
         except sqlite3.IntegrityError:
             message = "Username already exists."
         except Exception as e:
             message = f"An error occurred: {e}"
 
-    return render_template('signup.html', message=message)
+    return render_template('signup.html', message=message,
+                            username_min_length=USERNAME_MIN_LENGTH,
+                            username_max_length=USERNAME_MAX_LENGTH,
+                            password_min_length=PASSWORD_MIN_LENGTH,
+                            password_max_length=PASSWORD_MAX_LENGTH)
 
 
 # Enabling Write-Ahead Logging (WAL) for better performance
@@ -237,6 +270,9 @@ def genre_bands(genre_id):
     """
     Displays all bands belonging to a specific genre. The genre is determined by the genre_id.
     """
+    if genre_id <= 0 or genre_id > 6:
+        abort(404)
+
     conn = get_db_connection()
     bands = conn.execute('SELECT * FROM band WHERE genre_id = ?', (genre_id,)).fetchall()
     conn.close()
@@ -254,30 +290,47 @@ def bands():
     conn = get_db_connection()
     if search_query:
         bands = conn.execute('SELECT * FROM band WHERE LOWER(band_name) LIKE ?', ('%' + search_query + '%',)).fetchall()
+        if len(search_query) > SEARCH_CHAR_LIMIT:
+            flash(f"Search query cannot exceed {SEARCH_CHAR_LIMIT} characters.")
+            return redirect(url_for('search'))
     else:
         bands = conn.execute('SELECT * FROM band').fetchall()
     conn.close()
     return render_template('bands.html', bands=bands)
 
 
-# Albums for a band route
 @app.route('/band_albums/<int:band_id>')
 @login_required
 def band_albums(band_id):
     """
     Displays albums for a specific band, sorted by their release year.
     """
-    sort_by = request.args.get('sort', 'released_year')
     conn = sqlite3.connect('music.db')
     cursor = conn.cursor()
+
+    # 查询专辑
     albums = cursor.execute(
         'SELECT album.album_id, album.album_name, album.image, released_year '
         'FROM album WHERE band_id = ? ORDER BY released_year',
         (band_id,)
     ).fetchall()
+
+    # 检查 albums 是否为空
+    if not albums:
+        abort(404)  # 如果没有找到专辑，触发 404 错误
+
+    # 查询 band_name
     cursor.execute('SELECT band_name FROM band WHERE band_id = ?', (band_id,))
-    band_name = cursor.fetchone()[0]
-    return render_template('band_albums.html', albums=albums)
+    band_name_row = cursor.fetchone()
+
+    # 确保 band_name_row 不为 None
+    if band_name_row is None:
+        abort(404)  # 如果没有找到 band_name，触发 404 错误
+
+    band_name = band_name_row[0]  # 获取 band_name
+
+    conn.close()
+    return render_template('band_albums.html', albums=albums, band_name=band_name)
 
 
 # Albums page route with search and sorting options

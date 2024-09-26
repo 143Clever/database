@@ -29,32 +29,29 @@
 
     <main>
         <!-- Login form heading -->
-        <h1>Login</h1>
+        <h2 class="bands-title">Login</h2> 
         
         <!-- Login form, submitting POST request to the login route -->
         <form method="POST" action="/login">
             <!-- Username input field -->
             <label for="username">Username:</label>
-            <input type="text" name="username" id="username" required><br>
+            <input type="text" id="username" name="username" minlength="{{ username_min_length }}" maxlength="{{ username_max_length }}" required><br>
             
             <!-- Password input field -->
             <label for="password">Password:</label>
-            <input type="password" name="password" id="password" required><br>
-            
+            <input type="password" id="password" name="password" minlength="{{ password_min_length }}" maxlength="{{ password_max_length }}" required><br>
             <!-- Submit button for the form -->
             <button type="submit">Login</button>
+            {% if message %}
+                <p style="color: green;">{{ message }}</p> <!-- Success message if present -->
+            {% endif %}
+
+            <!-- Button linking back to the home page -->
+            <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+
+            <!-- Link for users to sign up if they don't have an account -->
+            <p>Haven't signed up? <a href="{{ url_for('signup') }}">Sign up here</a></p>
         </form>
-
-        <!-- Conditional message display after login attempt -->
-        {% if message %}
-            <p style="color: green;">{{ message }}</p> <!-- Success message if present -->
-        {% endif %}
-
-        <!-- Button linking back to the home page -->
-        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
-
-        <!-- Link for users to sign up if they don't have an account -->
-        <p>Haven't signed up? <a href="{{ url_for('signup') }}">Sign up here</a></p>
     </main>
 </body>
 </html>

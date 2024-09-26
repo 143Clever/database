@@ -24,18 +24,19 @@
     </header>
     
     <main>
-        <section id="genre">
-            <!-- Section for displaying different music genres -->
-            <h2>Genre</h2>
-            <div class="genre-list">
-                <!-- Loop through each genre and create a clickable link -->
-                {% for genre in genre %}
-                    <a href="{{ url_for('genre_bands', genre_id=genre['genre_id']) }}" class="genre-item">
-                        <h3>{{ genre['genre_name'] }}</h3>
-                    </a>
-                {% endfor %}
-            </div> <!-- End of genre-list div, contains all genre items -->
-        </section> <!-- End of genre section -->
-    </main>
+    <section id="genre">
+        <!-- Section for displaying different music genres -->
+        <h2 class="bands-title">Genre</h2> 
+        <div class="genre-list">
+            <!-- Loop through each genre and create a clickable link -->
+            {% for genre in genre %}
+                <a href="{{ url_for('genre_bands', genre_id=genre['genre_id']) }}" class="genre-item">
+                    <h3>{{ genre['genre_name'] }}</h3>
+                </a>
+            {% endfor %}
+        </div> <!-- End of genre-list div, contains all genre items -->
+    </section> <!-- End of genre section -->
+</main>
+
 </body>
 </html>

@@ -29,32 +29,32 @@
 
     <main>
         <!-- Sign-up form heading -->
-        <h1>Sign Up</h1>
+        <h2 class="bands-title">Sign Up</h2> 
         
         <!-- Sign-up form, submitting POST request to the signup route -->
         <form method="POST" action="/signup">
             <!-- Username input field -->
             <label for="username">Username:</label>
-            <input type="text" name="username" placeholder="Username" required><br>
-
+            <input type="text" id="username" name="username" minlength="{{ username_min_length }}" maxlength="{{ username_max_length }}" required><br>
             <!-- Password input field -->
             <label for="password">Password:</label>
-            <input type="password" name="password" placeholder="Password" required><br>
+            <input type="password" id="password" name="password" minlength="{{ password_min_length }}" maxlength="{{ password_max_length }}" required><br>
             
             <!-- Submit button for the form -->
             <button type="submit">Sign Up</button>
-        </form>
-
-        <!-- Conditional message display after signup attempt -->
+            <!-- Conditional message display after signup attempt -->
         {% if message %}
-            <p style="color: green;">{{ message }}</p> <!-- Success message if present -->
+        <p style="color: green;">{{ message }}</p> <!-- Success message if present -->
         {% endif %}
 
         <!-- Button linking back to the home page -->
         <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
 
-        <!-- Link for users to login if they already have an account -->
+         <!-- Link for users to login if they already have an account -->
         <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </form>
+
+        
     </main>
 </body>
 </html>
