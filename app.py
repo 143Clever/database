@@ -21,6 +21,35 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
+def db_query(query, params=(), single=True):
+    """
+    Executes a SQL query and returns either a single result or a list of results.
+    
+    :param query: SQL query to execute.
+    :param params: Tuple of parameters to pass to the query.
+    :param single: If True, return a single result; otherwise, return all results.
+    :return: A single result or a list of results.
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+
+        if single:
+            result = cursor.fetchone()
+        else:
+            result = cursor.fetchall()
+
+        return result
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return None
+    finally:
+        if conn:
+            conn.close()
+
+
 # Database connection function
 def get_db_connection():
     """
@@ -82,12 +111,7 @@ def login():
             return render_template('login.html', message=message)
 
         try:
-            conn = sqlite3.connect('music.db')
-            cursor = conn.cursor()
-            # Fetch user credentials from the database
-            cursor.execute("SELECT user_id, password FROM users WHERE username = ?", (username,))
-            result = cursor.fetchone()
-            conn.close()
+            result = db_query("SELECT user_id, password FROM users WHERE username = ?", (username,))
 
             if result:
                 user_id, stored_hashed_password = result
@@ -141,19 +165,12 @@ def account():
     
         return redirect(url_for('login'))
 
-    conn = sqlite3.connect('music.db')
-    cursor = conn.cursor()
-    # Retrieve the user's favorite albums
-    cursor.execute(
-        '''
-        SELECT album.album_id, album.album_name, album.image, album.band_name, album.released_year
-        FROM album 
-        JOIN favorites ON album.album_id = favorites.album_id 
-        WHERE favorites.user_id = ?
-        ''', (user_id,)
-    )
-    favorite_albums = cursor.fetchall()
-    conn.close()
+    favorite_albums = db_query('''
+    SELECT album.album_id, album.album_name, album.image, album.band_name, album.released_year
+    FROM album 
+    JOIN favorites ON album.album_id = favorites.album_id 
+    WHERE favorites.user_id = ?
+''', (user_id,), single=False)
 
     return render_template('account.html', username=session['username'], favorite_albums=favorite_albums,)
 
@@ -169,6 +186,8 @@ def delete_account():
         return redirect(url_for('login'))
 
     username = session['username']
+    
+    
     try:
         conn = sqlite3.connect('music.db')
         cursor = conn.cursor()
@@ -176,6 +195,7 @@ def delete_account():
         conn.commit()
         cursor.close()
         conn.close()
+       
         # Log the user out after account deletion
         session.pop('username', None)
         return redirect(url_for('index'))
@@ -287,15 +307,16 @@ def bands():
     Displays all bands. Users can search for bands by name. 
     """
     search_query = request.args.get('search', '').strip().lower()
-    conn = get_db_connection()
+    
     if search_query:
-        bands = conn.execute('SELECT * FROM band WHERE LOWER(band_name) LIKE ?', ('%' + search_query + '%',)).fetchall()
+        bands = db_query('SELECT * FROM band WHERE LOWER(band_name) LIKE ?', ('%' + search_query + '%',), single=False)
+   
         if len(search_query) > SEARCH_CHAR_LIMIT:
             flash(f"Search query cannot exceed {SEARCH_CHAR_LIMIT} characters.")
             return redirect(url_for('search'))
     else:
-        bands = conn.execute('SELECT * FROM band').fetchall()
-    conn.close()
+        bands = db_query('SELECT * FROM band', single=False)
+    
     return render_template('bands.html', bands=bands)
 
 
@@ -308,26 +329,26 @@ def band_albums(band_id):
     conn = sqlite3.connect('music.db')
     cursor = conn.cursor()
 
-    # 查询专辑
+    
     albums = cursor.execute(
         'SELECT album.album_id, album.album_name, album.image, released_year '
         'FROM album WHERE band_id = ? ORDER BY released_year',
         (band_id,)
     ).fetchall()
 
-    # 检查 albums 是否为空
+    
     if not albums:
-        abort(404)  # 如果没有找到专辑，触发 404 错误
+        abort(404)  
 
-    # 查询 band_name
+   
     cursor.execute('SELECT band_name FROM band WHERE band_id = ?', (band_id,))
     band_name_row = cursor.fetchone()
 
-    # 确保 band_name_row 不为 None
-    if band_name_row is None:
-        abort(404)  # 如果没有找到 band_name，触发 404 错误
 
-    band_name = band_name_row[0]  # 获取 band_name
+    if band_name_row is None:
+        abort(404)  
+
+    band_name = band_name_row[0]  
 
     conn.close()
     return render_template('band_albums.html', albums=albums, band_name=band_name)
