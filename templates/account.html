@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta charset="UTF-8"> <!-- Character encoding set to UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design -->
+    <title>Account</title> <!-- Title of the page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Link to external stylesheet -->
 </head>
 <body>
     <div class="container">
         <h2 class="center-title">Account</h2>
        
+        <!-- Display account information -->
         <div class="account-info">
             <p><strong>Username:</strong> {{ session['username'] }}</p>
         </div>
 
+        <!-- Account actions: Logout and Back Home -->
         <div class="account-actions">
             <a href="{{ url_for('logout') }}" class="btn">Logout</a>
             <a href="{{ url_for('index') }}" class="btn">Back Home</a>
         </div>
+
+        <!-- Form to delete account -->
         <form method="POST" action="{{ url_for('delete_account') }}">
             <button type="submit" class="btn delete-btn">Delete Account</button>
         </form>
     </div>
+
+    <!-- Display favorite albums -->
     <div class="album-list">
         <p>Total albums: {{ favorite_albums|length }}</p>
         {% if favorite_albums %}
@@ -41,36 +47,37 @@
             <p>You have no favorite albums.</p>
         {% endif %}
     </div>
-    
+
     <style>
-    .album-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-    
-    .album-card {
-        flex: 1 1 calc(33.333% - 20px);
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: center;
-        transition: background-color 0.3s ease;
-    }
-    
-    .album-card img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-    }
-    
-    .album-card:hover {
-        background-color: #f5f5f5;
-    }
-    
-    h1, h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+        /* Styling for the album list */
+        .album-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* Gap between album cards */
+        }
+        
+        .album-card {
+            flex: 1 1 calc(33.333% - 20px); /* Responsive card layout */
+            border: 1px solid #ddd; /* Border around each card */
+            padding: 10px; /* Padding inside the card */
+            text-align: center; /* Center align text */
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        }
+        
+        .album-card img {
+            width: 100px; /* Fixed width for album image */
+            height: 100px; /* Fixed height for album image */
+            object-fit: cover; /* Cover image without distortion */
+        }
+        
+        .album-card:hover {
+            background-color: #f5f5f5; /* Light background on hover */
+        }
+        
+        h1, h2 {
+            text-align: center; /* Center align headings */
+            margin-bottom: 20px; /* Margin below headings */
+        }
     </style>
 </body>
 </html>

@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Hometown - Bands in Genre</title>
+    <!-- Linking Google Fonts and an external stylesheet -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
     <header>
-        <h1>Rock Hometown</h1>
+        <h1>Rock Hometown</h1> <!-- Main title of the website -->
+
+        <!-- Navigation bar with links to different sections -->
         <nav>
             <ul>
+                <!-- Dynamic active class for each navigation item based on the current page -->
                 <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Home</a></li>
                 <li><a href="{{ url_for('bands') }}" class="{% if request.endpoint == 'bands' %}active{% endif %}">Bands</a></li>
                 <li><a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albums</a></li>
@@ -21,17 +25,25 @@
             </ul>
         </nav>
     </header>
+
     <main>
+        <!-- Section displaying the bands in a specific genre -->
         <section id="bands">
-            <h2>Bands in {{ genre_name }}</h2>
+            <h2>Bands in {{ genre_name }}</h2> <!-- Heading with the genre name dynamically populated -->
+
+            <!-- Container for the list of bands -->
             <div class="band-list">
+                <!-- Loop through each band and display their information -->
                 {% for band in bands %}
                 <div class="band-card">
+                    <!-- Link to the band's albums, using the band ID -->
                     <a href="{{ url_for('band_albums', band_id=band['band_id']) }}">
+                        <!-- Band image dynamically loaded from the static folder -->
                         <img src="{{ url_for('static', filename='images/' + band['image']) }}" alt="{{ band['band_name'] }}">
+                        <!-- Band name, formation year, and genre displayed -->
                         <h3>{{ band['band_name'] }}</h3>
                         <h4>Formed Year: {{ band['formed_year'] }}</h4>
-                <h5>Genre: {{ band['genre_name'] }}</h5>
+                        <h5>Genre: {{ band['genre_name'] }}</h5>
                     </a>
                 </div>
                 {% endfor %}

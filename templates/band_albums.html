@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <meta charset="UTF-8"> <!-- Specifies character encoding as UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures proper scaling on mobile devices -->
+
+    <!-- Link to the external CSS stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <title>Band Albums</title>
+    <title>Band Albums</title> <!-- The title of the page displayed in the browser tab -->
     
 </head>
 <body>
     
+    <!-- Main page title displaying the context of the page -->
     <h1 class="page-title">Albums by them</h1>
+
+    <!-- Grid container to display a list of albums in a grid layout -->
     <div class="album-grid">
+        <!-- Loop through the albums list to display each album -->
         {% for album in albums %}
+            <!-- Each album is contained in an album card -->
             <div class="album-card">
+                <!-- Container for the album's image -->
                 <div class="album-image-container">
+                    <!-- Album image, dynamically sourced from the 'images' folder -->
                     <img src="{{ url_for('static', filename='images/' + album[2]) }}" alt="{{ album[1] }}" class="album-image">
                 </div>
+                <!-- Album title -->
                 <h2 class="album-title">{{ album[1] }}</h2>
+                <!-- Album release year -->
                 <p class="album-year">Released: {{ album[3] }}</p>
+                <!-- Form to add the album to the user's favorites list, sending a POST request -->
                 <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post">
-                    <button type="submit">Add to Favorites</button>
+                    <button type="submit">Add to Favorites</button> <!-- Button to add the album to favorites -->
                 </form>
             </div>
         {% endfor %}
     </div>
     
-   
+    <!-- Back button that takes the user back to the bands page -->
     <div class="back-button">
         <a href="{{ url_for('bands') }}" class="btn">Back to Bands</a>
     </div>

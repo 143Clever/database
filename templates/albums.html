@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Hometown - Albums</title>
+    <meta charset="UTF-8"> <!-- Specifies character encoding as UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- For responsive design -->
+    <title>Rock Hometown - Albums</title> <!-- Title of the page -->
+
+    <!-- Google Fonts for better typography -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <!-- Header section with navigation links -->
     <header>
         <h1>Rock Hometown</h1>
         <nav>
@@ -21,32 +26,40 @@
             </ul>
         </nav>
     </header>
+
     <main>
+        <!-- Albums Section -->
         <section id="albums">
             <h2 class="albums-title">Albums</h2>
             
+            <!-- Search Form -->
             <form method="GET" action="/albums" class="search-form">
                 <input type="text" name="search" placeholder="Search for albums..." class="search-input">
                 <button type="submit" class="search-button">Search</button>
             </form>
+            
+            <!-- Sorting Dropdown -->
             <form method="GET" action="{{ url_for('albums') }}">
                 <label for="sort">Sort by:</label>
                 <select name="sort" id="sort" onchange="this.form.submit()">
                     <option value="released_year" {% if sort_by == 'released_year' %}selected{% endif %}>Release Year</option>
                     <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Album Name</option>
-                    
                 </select>
             </form>
+
+            <!-- Instructional Message -->
             <section id="center-message">
                 <h2>Double click to add to favourites</h2>
             </section>
             
+            <!-- Album List -->
             <div class="album-list">
+                <!-- Display alert messages, if any -->
                 {% if message %}
-        <div class="alert">
-            {{ message }}
-        </div>
-    {% endif %}
+                    <div class="alert">{{ message }}</div>
+                {% endif %}
+
+                <!-- Display albums if found, else show "No albums found" -->
                 {% if albums %}
                     {% for album in albums %}
                     <form action="{{ url_for('favorite', album_id=album[0]) }}" method="post" class="album-card-form" onsubmit="return confirm('Are you sure you want to add this album to favorites?');">
@@ -63,52 +76,42 @@
                     <p>No albums found.</p>
                 {% endif %}
             </div>
+
+            <!-- Styling for album container and cards -->
             <style>
                 .album-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        
-.album-card {
-    border: 1px solid black;
-    padding: 15px;
-    margin: 10px;
-    text-align: center;
-    width: 200px;
-    transition: transform 0.3s ease;
-}
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                }
 
-        .album-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .hidden-checkbox {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-        .hidden-checkbox:checked + .album-card {
-            background-color: red;
-        }
-        .album-card h3, .album-card p {
-            margin: 10px 0;
-        }
-                </style>
+                .album-card {
+                    border: 1px solid black;
+                    padding: 15px;
+                    margin: 10px;
+                    text-align: center;
+                    width: 200px;
+                    transition: transform 0.3s ease;
+                }
+
+                .album-card img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 10px;
+                }
+
+                .album-card h3, .album-card p {
+                    margin: 10px 0;
+                }
+            </style>
         </section>
     </main>
+
+    <!-- JavaScript to handle double-click functionality for adding to favorites -->
     <script>
         function toggleFavorite(cardElement) {
-           
             alert('Album has been added to favorites! Check your favorites in your account!');
             cardElement.classList.toggle('checked');
-
-            
             cardElement.closest('form').submit();
         }
     </script>

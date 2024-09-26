@@ -4,52 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Hometown - Bands</title>
+    <!-- Linking Google Fonts and external stylesheet -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="../static/styles.css"> <!-- External CSS stylesheet -->
 </head>
 <body>
     <header>
-        <h1>Rock Hometown</h1>
+        <h1>Rock Hometown</h1> <!-- Main title of the website -->
+
+        <!-- Navigation bar -->
         <nav>
             <ul>
+                <!-- Highlight the active page using dynamic template logic -->
                 <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Home</a></li>
                 <li><a href="{{ url_for('bands') }}" class="{% if request.endpoint == 'bands' %}active{% endif %}">Bands</a></li>
                 <li><a href="{{ url_for('albums') }}" class="{% if request.endpoint == 'albums' %}active{% endif %}">Albums</a></li>
                 <li><a href="{{ url_for('genre') }}" class="{% if request.endpoint == 'genre' %}active{% endif %}">Genre</a></li>
                 <li><a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Timeline</a></li>
+                <!-- Display the username from the session if the user is logged in -->
                 <li><a href="{{ url_for('account') }}" class="{% if request.endpoint == 'account' %}active{% endif %}">{{ session['username'] }}</a></li>
             </ul>
         </nav>
     </header>
-    <main>
-        <section id="bands">
-            <h2 class="bands-title">Bands</h2>
 
+    <main>
+        <!-- Section displaying the list of bands -->
+        <section id="bands">
+            <h2 class="bands-title">Bands</h2> <!-- Section title -->
+
+            <!-- Search form for searching bands -->
             <form method="GET" action="/bands" class="search-form">
-                <input type="text" name="search" placeholder="Search for bands..." class="search-input">
-                <button type="submit" class="search-button">Search</button>
+                <input type="text" name="search" placeholder="Search for bands..." class="search-input"> <!-- Search input field -->
+                <button type="submit" class="search-button">Search</button> <!-- Search button -->
             </form>
-            
-            
+
+            <!-- Container for displaying the list of bands -->
             <div class="band-list">
+                <!-- Check if there are any bands to display -->
                 {% if bands %}
+                    <!-- Loop through the list of bands and display each band's details -->
                     {% for band in bands %}
                     <div class="band-card">
-                        <a href="{{ url_for('band_albums', band_id=band['band_id']) }}">
+                        <a href="{{ url_for('band_albums', band_id=band['band_id']) }}"> <!-- Link to band's albums page -->
+                            <!-- Display the band's image -->
                             <img src="{{ url_for('static', filename='images/' + band['image']) }}" alt="{{ band['band_name'] }}">
-                            <h3>{{ band['band_name'] }}</h3>
-                            <h4>Formed Year: {{ band['formed_year'] }}</h4>
-                    <h5>Genre: {{ band['genre_name'] }}</h5>
+                            <h3>{{ band['band_name'] }}</h3> <!-- Band's name -->
+                            <h4>Formed Year: {{ band['formed_year'] }}</h4> <!-- Band's formation year -->
+                            <h5>Genre: {{ band['genre_name'] }}</h5> <!-- Band's genre -->
                         </a>
                     </div>
                     {% endfor %}
+                <!-- If no bands are found, display a message -->
                 {% else %}
                     <p>No bands found.</p>
                 {% endif %}
-
-                {% for band in bands %}
-  
-{% endfor %}
             </div>
         </section>
     </main>

@@ -4,40 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
+    <!-- Link to Google Fonts and external stylesheet -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
     <header>
-        <h1>Rock Hometown</h1>
+        <h1>Rock Hometown</h1> <!-- Main title of the website -->
+        
+        <!-- Navigation menu with links to different pages -->
         <nav>
             <ul>
+                <!-- Links to the home, bands, albums, and timeline pages -->
                 <li><a href="{{ url_for('index') }}">Home</a></li>
                 <li><a href="{{ url_for('bands') }}">Bands</a></li>
                 <li><a href="{{ url_for('albums') }}">Albums</a></li>
                 <li><a href="{{ url_for('timeline') }}">Timeline</a></li>
+                <!-- Buttons for login and sign up -->
                 <a href="{{ url_for('login') }}" class="btn">Login</a>
-            <a href="{{ url_for('signup') }}" class="btn">Sign Up</a>
+                <a href="{{ url_for('signup') }}" class="btn">Sign Up</a>
             </ul>
         </nav>
-        
     </header>
+
     <main>
+        <!-- Sign-up form heading -->
         <h1>Sign Up</h1>
+        
+        <!-- Sign-up form, submitting POST request to the signup route -->
         <form method="POST" action="/signup">
+            <!-- Username input field -->
             <label for="username">Username:</label>
             <input type="text" name="username" placeholder="Username" required><br>
 
+            <!-- Password input field -->
             <label for="password">Password:</label>
             <input type="password" name="password" placeholder="Password" required><br>
+            
+            <!-- Submit button for the form -->
             <button type="submit">Sign Up</button>
         </form>
-        {% if message %}
-        <p style="color: green;">{{ message }}</p>
-    {% endif %}
 
+        <!-- Conditional message display after signup attempt -->
+        {% if message %}
+            <p style="color: green;">{{ message }}</p> <!-- Success message if present -->
+        {% endif %}
+
+        <!-- Button linking back to the home page -->
         <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
-    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+
+        <!-- Link for users to login if they already have an account -->
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
     </main>
 </body>
 </html>
